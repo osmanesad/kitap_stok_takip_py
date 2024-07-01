@@ -36,7 +36,8 @@ def kitap_ekle(kitap_adi, kitap_barkod, kitap_stok):
         conn.commit()
         print("Kitap başarıyla eklendi.")
     except sqlite3.Error as e:
-        print(f"Veri eklerken bir hata oluştu: {e}")
+        print("Bu barkod numarası zaten mevcut. Lütfen farklı bir barkod kullanın.")
+        print(f"Hata kodu: {e}")
     finally:
         conn.close()
 
