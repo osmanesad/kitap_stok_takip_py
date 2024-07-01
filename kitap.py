@@ -1,6 +1,8 @@
 import sqlite3
 from datetime import datetime
 
+
+
 def veritabani_olustur():
     conn = sqlite3.connect('kitaplar.db')
     cursor = conn.cursor()
@@ -13,6 +15,17 @@ def veritabani_olustur():
     conn.commit()
     conn.close()
 
+def guncelle_veritabani_semasi():
+    conn = sqlite3.connect('kitaplar.db')
+    cursor = conn.cursor()
+    try:
+        cursor.execute("ALTER TABLE kitaplar ADD COLUMN kayit_tarihi TEXT")
+        print("Veritabanı şeması güncellendi: kayit_tarihi sütunu eklendi.")
+    except sqlite3.OperationalError:
+        print("kayit_tarihi sütunu zaten mevcut.")
+    conn.commit()
+    conn.close()
+
 def kitap_ekle(kitap_adi, kitap_barkod, kitap_stok):
     conn = sqlite3.connect('kitaplar.db')
     cursor = conn.cursor()
@@ -22,8 +35,8 @@ def kitap_ekle(kitap_adi, kitap_barkod, kitap_stok):
                        (kitap_adi, kitap_barkod, kitap_stok, kayit_tarihi))
         conn.commit()
         print("Kitap başarıyla eklendi.")
-    except sqlite3.IntegrityError:
-        print("Bu barkod numarası zaten mevcut. Lütfen farklı bir barkod kullanın.")
+    except sqlite3.Error as e:
+        print(f"Veri eklerken bir hata oluştu: {e}")
     finally:
         conn.close()
 
@@ -52,13 +65,34 @@ def kitap_ara(barkod):
     else:
         print("Bu barkoda sahip kitap bulunamadı.")
 
+def tum_verileri_sil():
+    conn = sqlite3.connect('kitaplar.db')
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM kitaplar")
+    conn.commit()
+    conn.close()
+    print("Tüm veriler silindi.")
+
+def secili_veriyi_sil(barkod):
+    conn = sqlite3.connect('kitaplar.db')
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM kitaplar WHERE kitap_barkod = ?", (barkod,))
+    if cursor.rowcount > 0:
+        print(f"Barkod numarası {barkod} olan kitap silindi.")
+    else:
+        print("Bu barkoda sahip kitap bulunamadı.")
+    conn.commit()
+    conn.close()
+
 def ana_menu():
     while True:
         print("\n1. Kitap Ekle")
         print("2. Kitapları Listele")
         print("3. Kitap Ara")
-        print("4. Çıkış")
-        secim = input("Lütfen bir seçenek girin (1-4): ")
+        print("4. Tüm Verileri Sil")
+        print("5. Seçili Veriyi Sil")
+        print("6. Çıkış")
+        secim = input("Lütfen bir seçenek girin (1-6): ")
         
         if secim == '1':
             kitap_adi = input("Kitap adı: ")
@@ -71,6 +105,15 @@ def ana_menu():
             barkod = input("Aranacak kitabın barkodunu girin: ")
             kitap_ara(barkod)
         elif secim == '4':
+            onay = input("Tüm verileri silmek istediğinizden emin misiniz? (E/H): ")
+            if onay.lower() == 'e':
+                tum_verileri_sil()
+            else:
+                print("İşlem iptal edildi.")
+        elif secim == '5':
+            barkod = input("Silinecek kitabın barkodunu girin: ")
+            secili_veriyi_sil(barkod)
+        elif secim == '6':
             print("Programdan çıkılıyor...")
             break
         else:
@@ -78,4 +121,5 @@ def ana_menu():
 
 if __name__ == "__main__":
     veritabani_olustur()
+    guncelle_veritabani_semasi()
     ana_menu()
