@@ -9,7 +9,7 @@
  #### 5- Seçili veriyi sil (id'ye göre)
 
  ### Eklemeyi Planladıklarım
- #### 1- Yazar Adi
+ #### 1- Yazar Adi -> Güncellemeyle Eklendi (03.07.24)
  #### 2- Veri Güncelle
  #### 3- Excel'e aktar
  #### 4...5...6...
