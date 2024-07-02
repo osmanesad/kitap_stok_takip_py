@@ -9,6 +9,7 @@ def veritabani_olustur():
     cursor.execute('''CREATE TABLE IF NOT EXISTS kitaplar
                       (id INTEGER PRIMARY KEY,
                        kitap_adi TEXT,
+                       kitap_yazar TEXT,
                        kitap_barkod TEXT UNIQUE,
                        kitap_stok INTEGER,
                        kayit_tarihi TEXT)''')
@@ -26,13 +27,13 @@ def guncelle_veritabani_semasi():
     conn.commit()
     conn.close()
 
-def kitap_ekle(kitap_adi, kitap_barkod, kitap_stok):
+def kitap_ekle(kitap_adi, kitap_yazar, kitap_barkod, kitap_stok):
     conn = sqlite3.connect('kitaplar.db')
     cursor = conn.cursor()
     kayit_tarihi = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     try:
-        cursor.execute("INSERT INTO kitaplar (kitap_adi, kitap_barkod, kitap_stok, kayit_tarihi) VALUES (?, ?, ?, ?)",
-                       (kitap_adi, kitap_barkod, kitap_stok, kayit_tarihi))
+        cursor.execute("INSERT INTO kitaplar (kitap_adi, kitap_yazar, kitap_barkod, kitap_stok, kayit_tarihi) VALUES (?, ?, ?, ?, ?)",
+                       (kitap_adi, kitap_yazar, kitap_barkod, kitap_stok, kayit_tarihi))
         conn.commit()
         print("Kitap başarıyla eklendi.")
     except sqlite3.Error as e:
@@ -52,7 +53,7 @@ def kitaplari_listele():
         print("Veritabanında kitap bulunamadı.")
     else:
         for kitap in kitaplar:
-            print(f"ID: {kitap[0]}, Kitap Adı: {kitap[1]}, Barkod: {kitap[2]}, Stok: {kitap[3]}, Kayıt Tarihi: {kitap[4]}")
+            print(f"ID: {kitap[0]}, Kitap Adı: {kitap[1]}, Kitap Yazarı: {kitap[2]}, Barkod: {kitap[3]}, Stok: {kitap[4]}, Kayıt Tarihi: {kitap[5]}")
 
 def kitap_ara(barkod):
     conn = sqlite3.connect('kitaplar.db')
@@ -62,7 +63,7 @@ def kitap_ara(barkod):
     conn.close()
     
     if kitap:
-        print(f"ID: {kitap[0]}, Kitap Adı: {kitap[1]}, Barkod: {kitap[2]}, Stok: {kitap[3]}, Kayıt Tarihi: {kitap[4]}")
+        print(f"ID: {kitap[0]}, Kitap Adı: {kitap[1]}, Kitap Yazarı: {kitap[2]}, Barkod: {kitap[3]}, Stok: {kitap[4]}, Kayıt Tarihi: {kitap[5]}")
     else:
         print("Bu barkoda sahip kitap bulunamadı.")
 
@@ -96,10 +97,11 @@ def ana_menu():
         secim = input("Lütfen bir seçenek girin (1-6): ")
         
         if secim == '1':
-            kitap_adi = input("Kitap adı: ")
-            kitap_barkod = input("Kitap barkodu: ")
-            kitap_stok = int(input("Kitap stok adedi: "))
-            kitap_ekle(kitap_adi, kitap_barkod, kitap_stok)
+            kitap_adi = input("Kitap Adı: ")
+            kitap_yazar = input("Kitap Yazarı: ")
+            kitap_barkod = input("Kitap Barkodu: ")
+            kitap_stok = int(input("Kitap Stok Adedi: "))
+            kitap_ekle(kitap_adi, kitap_yazar, kitap_barkod, kitap_stok)
         elif secim == '2':
             kitaplari_listele()
         elif secim == '3':
