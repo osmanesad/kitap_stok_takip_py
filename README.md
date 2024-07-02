@@ -6,7 +6,7 @@
  #### 2- Kitaplari Listele
  #### 3- Kitap Ara(Barkoda göre)
  #### 4- Tüm verileri sil(Bir hata alınca böyle bir şey ekleme gereği duydum.)
- #### 5- Seçili veriyi sil (id'ye göre)
+ #### 5- Seçili veriyi sil (barkod'a göre)
 
  ### Eklemeyi Planladıklarım
  #### 1- Yazar Adi -> Güncellemeyle Eklendi (03.07.24)
