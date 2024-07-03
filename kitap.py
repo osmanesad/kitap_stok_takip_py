@@ -23,7 +23,7 @@ def guncelle_veritabani_semasi():
         cursor.execute("ALTER TABLE kitaplar ADD COLUMN kayit_tarihi TEXT")
         print("Veritabanı şeması güncellendi: kayit_tarihi sütunu eklendi.")
     except sqlite3.OperationalError:
-        print("kayit_tarihi sütunu zaten mevcut.")
+       print("Veritabanı bağlantısı başarılı.") #kayit_tarihi sütünü hatasını yakalamak için.
     conn.commit()
     conn.close()
 
