@@ -12,6 +12,7 @@ def veritabani_olustur():
                        kitap_yazar TEXT,
                        kitap_barkod TEXT UNIQUE,
                        kitap_stok INTEGER,
+                       guncelleme_tarihi TEXT,
                        kayit_tarihi TEXT)''')
     conn.commit()
     conn.close()
@@ -20,8 +21,8 @@ def guncelle_veritabani_semasi():
     conn = sqlite3.connect('kitaplar.db')
     cursor = conn.cursor()
     try:
-        cursor.execute("ALTER TABLE kitaplar ADD COLUMN kayit_tarihi TEXT")
-        print("Veritabanı şeması güncellendi: kayit_tarihi sütunu eklendi.")
+        cursor.execute("ALTER TABLE kitaplar ADD COLUMN guncelleme_tarihi TEXT")
+        print("Veritabanı şeması güncellendi: guncelleme_tarihi sütunu eklendi.")
     except sqlite3.OperationalError:
        print("Veritabanı bağlantısı başarılı.") #kayit_tarihi sütünü hatasını yakalamak için.
     conn.commit()
@@ -32,8 +33,8 @@ def kitap_ekle(kitap_adi, kitap_yazar, kitap_barkod, kitap_stok):
     cursor = conn.cursor()
     kayit_tarihi = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     try:
-        cursor.execute("INSERT INTO kitaplar (kitap_adi, kitap_yazar, kitap_barkod, kitap_stok, kayit_tarihi) VALUES (?, ?, ?, ?, ?)",
-                       (kitap_adi, kitap_yazar, kitap_barkod, kitap_stok, kayit_tarihi))
+        cursor.execute("INSERT INTO kitaplar (kitap_adi, kitap_yazar, kitap_barkod, kitap_stok, kayit_tarihi, guncelleme_tarihi) VALUES (?, ?, ?, ?, ?, ?)",
+                       (kitap_adi, kitap_yazar, kitap_barkod, kitap_stok, kayit_tarihi, None))
         conn.commit()
         print("Kitap başarıyla eklendi.")
     except sqlite3.Error as e:
@@ -53,7 +54,7 @@ def kitaplari_listele():
         print("Veritabanında kitap bulunamadı.")
     else:
         for kitap in kitaplar:
-            print(f"ID: {kitap[0]}, Kitap Adı: {kitap[1]}, Kitap Yazarı: {kitap[2]}, Barkod: {kitap[3]}, Stok: {kitap[4]}, Kayıt Tarihi: {kitap[5]}")
+            print(f"ID: {kitap[0]}, Kitap Adı: {kitap[1]}, Kitap Yazarı: {kitap[2]}, Barkod: {kitap[3]}, Stok: {kitap[4]}, Kayıt Tarihi: {kitap[5]}, Güncellenme Tarihi: {kitap[6] if kitap[6] else 'Yeni güncelleme yok.'}")
 
 def kitap_ara(barkod):
     conn = sqlite3.connect('kitaplar.db')
@@ -63,7 +64,7 @@ def kitap_ara(barkod):
     conn.close()
     
     if kitap:
-        print(f"ID: {kitap[0]}, Kitap Adı: {kitap[1]}, Kitap Yazarı: {kitap[2]}, Barkod: {kitap[3]}, Stok: {kitap[4]}, Kayıt Tarihi: {kitap[5]}")
+        print(f"ID: {kitap[0]}, Kitap Adı: {kitap[1]}, Kitap Yazarı: {kitap[2]}, Barkod: {kitap[3]}, Stok: {kitap[4]}, Kayıt Tarihi: {kitap[5]}, Güncellenme Tarihi: {kitap[6] if kitap[6] else 'Yeni güncelleme yok.'}")
     else:
         print("Bu barkoda sahip kitap bulunamadı.")
 
@@ -93,16 +94,21 @@ def kitap_duzenle(barkod):
     kitap = cursor.fetchone()
     
     if kitap:
-        print(f"Mevcut Bilgiler: Kitap Adı: {kitap[1]}, Yazar: {kitap[2]}, Stok: {kitap[4]}")
-        yeni_ad = input("Yeni Kitap Adı (değiştirmemek için boş bırakın): ") or kitap[1]
-        yeni_yazar = input("Yeni Yazar (değiştirmemek için boş bırakın): ") or kitap[2]
-        yeni_stok = input("Yeni Stok Adedi (değiştirmemek için boş bırakın): ") or kitap[4]
+        print(f"Mevcut Bilgiler: Kitap Adı: {kitap[1]}, Yazar: {kitap[2]}, Stok: {kitap[4]}, Eklenme Tarihi: {kitap[5]}, Son Güncelleme Tarihi: {kitap[6] if kitap[6] else 'Yeni güncelleme yok.'}")
+        
+        yeni_ad = input("Yeni Kitap Adı: ") or kitap[1]
+        yeni_yazar = input("Yeni Yazar : ") or kitap[2]
+        yeni_stok = input("Yeni Stok Adedi : ") or kitap[4]
+        guncelleme_tarihi = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        
+        
         
         try:
-            cursor.execute("UPDATE kitaplar SET kitap_adi = ?, kitap_yazar = ?, kitap_stok = ? WHERE kitap_barkod = ?",
-                           (yeni_ad, yeni_yazar, yeni_stok, barkod))
+            cursor.execute("UPDATE kitaplar SET kitap_adi = ?, kitap_yazar = ?, kitap_stok = ?, guncelleme_tarihi = ? WHERE kitap_barkod = ?",
+                           (yeni_ad, yeni_yazar, yeni_stok, guncelleme_tarihi, barkod))
             conn.commit()
             print("Kitap bilgileri güncellendi.")
+            print(f"Güncellenme tarihi: {guncelleme_tarihi}")
         except sqlite3.Error as e:
             print(f"Güncelleme sırasında bir hata oluştu: {e}")
     else:
