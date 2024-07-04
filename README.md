@@ -10,6 +10,7 @@
 
  ### Eklemeyi Planladıklarım
  #### 1- Yazar Adi -> Güncellemeyle Eklendi (03.07.24)
- #### 2- Veri Güncelle
+ #### 2- Veri Güncelle -> Üzerinde çalışılıyor
+ ##### (Şuan için kullanılabilir, tarih bilgisi üzerinde düşünülüyor...)
  #### 3- Excel'e aktar
  #### 4...5...6...
