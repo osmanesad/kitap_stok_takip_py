@@ -54,7 +54,7 @@ def kitaplari_listele():
         print("Veritabanında kitap bulunamadı.")
     else:
         for kitap in kitaplar:
-            print(f"ID: {kitap[0]}, Kitap Adı: {kitap[1]}, Kitap Yazarı: {kitap[2]}, Barkod: {kitap[3]}, Stok: {kitap[4]}, Kayıt Tarihi: {kitap[5]}, Güncellenme Tarihi: {kitap[6] if kitap[6] else 'Yeni güncelleme yok.'}")
+            print(f"\n >>ID: {kitap[0]}, \nKitap Adı: {kitap[1]}, \nKitap Yazarı: {kitap[2]}, \nBarkod: {kitap[3]}, \nStok: {kitap[4]}, \nKayıt Tarihi: {kitap[5]}, \nGüncelleme Tarihi: {kitap[6] if kitap[6] else '-'}\n")
 
 def kitap_ara(barkod):
     conn = sqlite3.connect('kitaplar.db')
