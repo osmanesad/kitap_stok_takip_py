@@ -1,7 +1,6 @@
 import sqlite3
+import pandas as pd
 from datetime import datetime
-
-
 
 def veritabani_olustur():
     conn = sqlite3.connect('kitaplar.db')
@@ -16,6 +15,7 @@ def veritabani_olustur():
                        kayit_tarihi TEXT)''')
     conn.commit()
     conn.close()
+
 
 def guncelle_veritabani_semasi():
     conn = sqlite3.connect('kitaplar.db')
@@ -124,9 +124,10 @@ def ana_menu():
         print("3. Kitap Ara")
         print("4. Tüm Verileri Sil")
         print("5. Seçili Veriyi Sil")
-        print("6. Kitap Düzenle")  # Yeni eklenen seçenek
-        print("7. Çıkış")
-        secim = input("Lütfen bir seçenek girin (1-7): ")
+        print("6. Kitap Düzenle")
+        print("7. Verileri Excel'e Aktar")  # Yeni eklenen seçenek
+        print("8. Çıkış")
+        secim = input("Lütfen bir seçenek girin (1-8): ")
         
         if secim == '1':
             kitap_adi = input("Kitap Adı: ")
@@ -148,14 +149,26 @@ def ana_menu():
         elif secim == '5':
             barkod = input("Silinecek kitabın barkodunu girin: ")
             secili_veriyi_sil(barkod)
-        elif secim == '6':  # Yeni eklenen seçenek
+        elif secim == '6':
             barkod = input("Düzenlenecek kitabın barkodunu girin: ")
             kitap_duzenle(barkod)
         elif secim == '7':
+            verileri_excele_aktar()
+        elif secim == '8':
             print("Programdan çıkılıyor...")
             break
         else:
             print("Geçersiz seçenek. Lütfen tekrar deneyin.")
+
+def verileri_excele_aktar():
+    conn = sqlite3.connect('kitaplar.db')
+    df = pd.read_sql_query("SELECT * FROM kitaplar", conn)
+    conn.close()
+
+    excel_dosya_adi = 'kitaplar.xlsx'
+    df.to_excel(excel_dosya_adi, index=False)
+    print(f"Veriler başarıyla {excel_dosya_adi} dosyasına aktarıldı.")
+
 
 if __name__ == "__main__":
     veritabani_olustur()
