@@ -1,5 +1,7 @@
 import sqlite3
-import pandas as pd
+import pandas as pd # Verileri Excel dosyasına aktarmak için kurduğumuz ekleti.
+# kurulum için "pip install pandas openpyxl"
+
 from datetime import datetime
 
 def veritabani_olustur():
@@ -160,6 +162,7 @@ def ana_menu():
         else:
             print("Geçersiz seçenek. Lütfen tekrar deneyin.")
 
+# Verileri excel dosyasına aktarmak için kullandığımız fonksiyon.
 def verileri_excele_aktar():
     conn = sqlite3.connect('kitaplar.db')
     df = pd.read_sql_query("SELECT * FROM kitaplar", conn)
