@@ -18,4 +18,6 @@
  ###### Şuan için kullanılabilir, tarih bilgisi üzerinde düşünülüyor.(05.07.24)
  #### 3- Excel'e aktar
  ###### Şuan için bu seçnek çalışıyor. Test aşamasında. (06.07.2024)
+ #### 4- Excel'e aktarılmış bir veriyi ya da Excel tablosunu veritabanına aktarma.
+ ###### Bu işlem sayesinde büyük verileri yani tabloları kolay bir şekilde vt'ye aktarılabilir. (Planlanan. Aktif değil.)
  
