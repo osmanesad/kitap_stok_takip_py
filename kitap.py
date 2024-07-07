@@ -1,7 +1,8 @@
+# Python ile Stok Takip
 import sqlite3
-import pandas as pd # Verileri Excel dosyasına aktarmak için kurduğumuz ekleti.
-# kurulum için "pip install pandas openpyxl"
-
+import pandas as pd 
+# Verileri Excel dosyasına aktarmak için kurduğumuz eklenti.
+# Kurulum için "pip install pandas openpyxl"
 from datetime import datetime
 
 def veritabani_olustur():
@@ -17,7 +18,6 @@ def veritabani_olustur():
                        kayit_tarihi TEXT)''')
     conn.commit()
     conn.close()
-
 
 def guncelle_veritabani_semasi():
     conn = sqlite3.connect('kitaplar.db')
