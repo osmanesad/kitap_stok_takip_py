@@ -20,7 +20,7 @@
  ###### Şuan için bu seçnek çalışıyor. Test aşamasında. (06.07.2024)
  #### 4- Excel'e aktarılmış bir veriyi ya da Excel tablosunu veritabanına aktarma.
  ###### Bu işlem sayesinde büyük verileri yani tabloları kolay bir şekilde vt'ye aktarılabilir. (Planlanan. Aktif değil.)
- ###### Yukarıdaki fikri uygulamay koyduk. Şuan için test aşamasında ama çalışıyor. Yapılması gerekenleri aşağıda belirtiyorum.
+ ###### Yukarıdaki fikri uygulamaya koyduk. Şuan için test aşamasında ama çalışıyor. Yapılması gerekenleri aşağıda belirtiyorum.
 
  ## Excel dosyasından veritabanına veri eklemek için yapılması gerekenler.
 
