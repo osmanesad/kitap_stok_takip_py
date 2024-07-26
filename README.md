@@ -28,7 +28,7 @@
  #### 1- pip install openpyxl [Bu eklentiyi kuruyoruz, mevcutsa güncelliyoruz.]
  #### 2- pip install pandas [Bu eklentiyi kuruyoruz, mevcutsa güncelliyoruz.]
  #### 3- Excel dosyamızının uzantısı .xlsx olacak.
- #### 4- Excel dosyamızın konumu python dosyalarımızın içinde yani ana klasötürmüzde yer alacak.
+ #### 4- Excel dosyamızın konumu python dosyalarımızın içinde yani ana klasörümüzde yer alacak.
  #### 5- Excel dosyamızdaki sütun başlıklarımız veritabanı başlıklarıyla aynı olmalı.
  ##### [kitap_adi, kitap_yazar, kitap_barkod, kitap_stok, kayit_tarihi] şeklinde.
  #### 6- Tarih-saat sütunu şimdilik boş kalmalı. Veritabanıyla uyum sorunu için güncelleme yapılacak.
