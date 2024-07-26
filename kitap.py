@@ -5,6 +5,42 @@ import pandas as pd
 # Kurulum için "pip install pandas openpyxl"
 from datetime import datetime
 
+def excel_to_database():
+    try:
+        # Excel dosyasının adını kullanıcıdan al
+        excel_file = input("Lütfen Excel dosyasının adını uzantısıyla birlikte girin (örn: kitaplar.xlsx): ")
+        
+        # Excel dosyasını oku
+        df = pd.read_excel(excel_file)
+        
+        # Veritabanı bağlantısını oluştur
+        conn = sqlite3.connect('kitaplar.db')
+        cursor = conn.cursor()
+        
+        # Excel'deki her satır için
+        for index, row in df.iterrows():
+            try:
+                # Verileri veritabanına ekle
+                cursor.execute("""
+                INSERT INTO kitaplar (kitap_adi, kitap_yazar, kitap_barkod, kitap_stok, kayit_tarihi)
+                VALUES (?, ?, ?, ?, ?)
+                """, (row['kitap_adi'], row['kitap_yazar'], row['kitap_barkod'], row['kitap_stok'], row['kayit_tarihi']))
+                
+                print(f"Kitap eklendi: {row['kitap_adi']}")
+            except sqlite3.IntegrityError:
+                print(f"Hata: {row['kitap_barkod']} barkodlu kitap zaten mevcut. Bu kayıt atlandı.")
+        
+        # Değişiklikleri kaydet ve bağlantıyı kapat
+        conn.commit()
+        conn.close()
+        
+        print("Veriler başarıyla veritabanına aktarıldı.")
+    except FileNotFoundError:
+        print("Belirtilen Excel dosyası bulunamadı.")
+    except Exception as e:
+        print(f"Bir hata oluştu: {e}")
+
+
 def veritabani_olustur():
     conn = sqlite3.connect('kitaplar.db')
     cursor = conn.cursor()
@@ -118,6 +154,8 @@ def kitap_duzenle(barkod):
     
     conn.close()
 
+    
+
 
 def ana_menu():
     while True:
@@ -127,9 +165,12 @@ def ana_menu():
         print("4. Tüm Verileri Sil")
         print("5. Seçili Veriyi Sil")
         print("6. Kitap Düzenle")
-        print("7. Verileri Excel'e Aktar")  # Yeni eklenen seçenek
-        print("8. Çıkış")
-        secim = input("Lütfen bir seçenek girin (1-8): ")
+        print("7. Verileri Excel'e Aktar")
+        print("8. Excel'den Verileri İçe Aktar")  # Yeni eklenen seçenek
+        print("9. Çıkış")
+        secim = input("Lütfen bir seçenek girin (1-9): ")
+
+        
         
         if secim == '1':
             kitap_adi = input("Kitap Adı: ")
@@ -157,6 +198,8 @@ def ana_menu():
         elif secim == '7':
             verileri_excele_aktar()
         elif secim == '8':
+            excel_to_database()
+        elif secim == '9':
             print("Programdan çıkılıyor...")
             break
         else:
