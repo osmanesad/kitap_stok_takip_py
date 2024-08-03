@@ -1,6 +1,7 @@
 # Python ile Stok Takip
 import sqlite3
 import pandas as pd 
+import gui
 # Verileri Excel dosyasına aktarmak için kurduğumuz eklenti.
 # Kurulum için "pip install pandas openpyxl"
 from datetime import datetime
@@ -81,6 +82,9 @@ def kitap_ekle(kitap_adi, kitap_yazar, kitap_barkod, kitap_stok):
     finally:
         conn.close()
 
+
+(""" Eski versiyon!
+
 def kitaplari_listele():
     conn = sqlite3.connect('kitaplar.db')
     cursor = conn.cursor()
@@ -93,6 +97,25 @@ def kitaplari_listele():
     else:
         for kitap in kitaplar:
             print(f"\n >>ID: {kitap[0]}, \nKitap Adı: {kitap[1]}, \nKitap Yazarı: {kitap[2]}, \nBarkod: {kitap[3]}, \nStok: {kitap[4]}, \nKayıt Tarihi: {kitap[5]}, \nGüncelleme Tarihi: {kitap[6] if kitap[6] else '-'}\n")
+""")
+
+def kitaplari_listele(return_data=False):
+    conn = sqlite3.connect('kitaplar.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM kitaplar")
+    kitaplar = cursor.fetchall()
+    conn.close()
+    
+    if return_data:
+        return kitaplar
+    else:
+        if len(kitaplar) == 0:
+            print("Veritabanında kitap bulunamadı.")
+        else:
+            for kitap in kitaplar:
+                print(f"ID: {kitap[0]}, Kitap Adı: {kitap[1]}, Kitap Yazarı: {kitap[2]}, Barkod: {kitap[3]}, Stok: {kitap[4]}, Kayıt Tarihi: {kitap[5]}")
+
+
 
 def kitap_ara(barkod):
     conn = sqlite3.connect('kitaplar.db')
@@ -105,6 +128,11 @@ def kitap_ara(barkod):
         print(f"ID: {kitap[0]}, Kitap Adı: {kitap[1]}, Kitap Yazarı: {kitap[2]}, Barkod: {kitap[3]}, Stok: {kitap[4]}, Kayıt Tarihi: {kitap[5]}, Güncellenme Tarihi: {kitap[6] if kitap[6] else 'Yeni güncelleme yok.'}")
     else:
         print("Bu barkoda sahip kitap bulunamadı.")
+
+
+       
+
+
 
 def tum_verileri_sil():
     conn = sqlite3.connect('kitaplar.db')
