@@ -1,4 +1,4 @@
-# Python ile Stok Takip
+# Python ile Stok Takip      
 import sqlite3
 import pandas as pd 
 import gui
