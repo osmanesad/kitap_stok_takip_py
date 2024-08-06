@@ -2,6 +2,7 @@
 import sqlite3
 import pandas as pd 
 import gui
+
 # Verileri Excel dosyasına aktarmak için kurduğumuz eklenti.
 # Kurulum için "pip install pandas openpyxl"
 from datetime import datetime
@@ -117,17 +118,23 @@ def kitaplari_listele(return_data=False):
 
 
 
-def kitap_ara(barkod):
+def kitap_ara(return_data=False):
     conn = sqlite3.connect('kitaplar.db')
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM kitaplar WHERE kitap_barkod = ?", (barkod,))
-    kitap = cursor.fetchone()
+    cursor.execute("SELECT * FROM kitaplar WHERE kitap_barkod = ?")
+    kitaplar = cursor.fetchone()
     conn.close()
     
-    if kitap:
-        print(f"ID: {kitap[0]}, Kitap Adı: {kitap[1]}, Kitap Yazarı: {kitap[2]}, Barkod: {kitap[3]}, Stok: {kitap[4]}, Kayıt Tarihi: {kitap[5]}, Güncellenme Tarihi: {kitap[6] if kitap[6] else 'Yeni güncelleme yok.'}")
+    if return_data:
+        return kitaplar
     else:
-        print("Bu barkoda sahip kitap bulunamadı.")
+        if len(kitaplar) == 0:
+            print("Bu barkoda sahip kitap bulunamadı.")
+        else:
+            for kitap in kitaplar:
+                print(f"ID: {kitap[0]}, Kitap Adı: {kitap[1]}, Kitap Yazarı: {kitap[2]}, Barkod: {kitap[3]}, Stok: {kitap[4]}, Kayıt Tarihi: {kitap[5]}, Güncellenme Tarihi: {kitap[6] if kitap[6] else 'Yeni güncelleme yok.'}")
+
+
 
 
        
