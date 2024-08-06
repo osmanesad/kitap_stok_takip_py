@@ -1,19 +1,16 @@
 # Python ile Stok Takip      
 import sqlite3
 import pandas as pd 
-import gui
+
 
 # Verileri Excel dosyasına aktarmak için kurduğumuz eklenti.
 # Kurulum için "pip install pandas openpyxl"
 from datetime import datetime
 
-def excel_to_database():
+def excel_to_database(file_name):
     try:
-        # Excel dosyasının adını kullanıcıdan al
-        excel_file = input("Lütfen Excel dosyasının adını uzantısıyla birlikte girin (örn: kitaplar.xlsx): ")
-        
         # Excel dosyasını oku
-        df = pd.read_excel(excel_file)
+        df = pd.read_excel(file_name)
         
         # Veritabanı bağlantısını oluştur
         conn = sqlite3.connect('kitaplar.db')
@@ -37,8 +34,6 @@ def excel_to_database():
         conn.close()
         
         print("Veriler başarıyla veritabanına aktarıldı.")
-    except FileNotFoundError:
-        print("Belirtilen Excel dosyası bulunamadı.")
     except Exception as e:
         print(f"Bir hata oluştu: {e}")
 
@@ -118,25 +113,40 @@ def kitaplari_listele(return_data=False):
 
 
 
-def kitap_ara(return_data=False):
+def kitap_ara(barkod, return_data=False):
     conn = sqlite3.connect('kitaplar.db')
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM kitaplar WHERE kitap_barkod = ?")
-    kitaplar = cursor.fetchone()
+    cursor.execute("SELECT * FROM kitaplar WHERE kitap_barkod = ?", (barkod,))
+    kitap = cursor.fetchone()
     conn.close()
     
     if return_data:
-        return kitaplar
+        return kitap
     else:
-        if len(kitaplar) == 0:
-            print("Bu barkoda sahip kitap bulunamadı.")
+        if kitap:
+            print(f"ID: {kitap[0]}, Kitap Adı: {kitap[1]}, Kitap Yazarı: {kitap[2]}, Barkod: {kitap[3]}, "
+                  f"Stok: {kitap[4]}, Kayıt Tarihi: {kitap[5]}, "
+                  f"Güncelleme Tarihi: {kitap[6] if kitap[6] else 'Henüz güncellenmedi'}")
         else:
-            for kitap in kitaplar:
-                print(f"ID: {kitap[0]}, Kitap Adı: {kitap[1]}, Kitap Yazarı: {kitap[2]}, Barkod: {kitap[3]}, Stok: {kitap[4]}, Kayıt Tarihi: {kitap[5]}, Güncellenme Tarihi: {kitap[6] if kitap[6] else 'Yeni güncelleme yok.'}")
+            print("Bu barkoda sahip kitap bulunamadı.")
 
+(""" 
 
+def kitap_ara(barkod):
+    conn = sqlite3.connect('kitaplar.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM kitaplar WHERE kitap_barkod = ?", (barkod,))
+    kitap = cursor.fetchone()
+    conn.close()
+    
+    if kitap:
+        print(f"ID: {kitap[0]}, Kitap Adı: {kitap[1]}, Kitap Yazarı: {kitap[2]}, Barkod: {kitap[3]}, "
+              f"Stok: {kitap[4]}, Kayıt Tarihi: {kitap[5]}, "
+              f"Güncelleme Tarihi: {kitap[6] if kitap[6] else 'Henüz güncellenmedi'}")
+    else:
+        print("Bu barkoda sahip kitap bulunamadı.")
 
-
+""")
        
 
 
@@ -241,15 +251,13 @@ def ana_menu():
             print("Geçersiz seçenek. Lütfen tekrar deneyin.")
 
 # Verileri excel dosyasına aktarmak için kullandığımız fonksiyon.
-def verileri_excele_aktar():
+def verileri_excele_aktar(file_name='kitaplar.xlsx'):
     conn = sqlite3.connect('kitaplar.db')
     df = pd.read_sql_query("SELECT * FROM kitaplar", conn)
     conn.close()
 
-    excel_dosya_adi = 'kitaplar.xlsx'
-    df.to_excel(excel_dosya_adi, index=False)
-    print(f"Veriler başarıyla {excel_dosya_adi} dosyasına aktarıldı.")
-
+    df.to_excel(file_name, index=False)
+    print(f"Veriler başarıyla {file_name} dosyasına aktarıldı.")
 
 if __name__ == "__main__":
     veritabani_olustur()
