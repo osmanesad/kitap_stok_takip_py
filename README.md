@@ -38,9 +38,9 @@
  
 ## Uygulamaya arayüz kazandırmak için kurulması gereken paketler. (07.08.2024)
 
-### Python ile yazdığımız bu programı artık terminal ekranında işlem yapmadan Windwos ve Mac işletim sistemlerinde çalıştırabileceğiniz bir arayüz geliştiriyorum.
-### Arayüzü başlatmak için IDE'nizde "gui.py" dosyasından çalıştırısanız program yeni bir pencerede açılacaktır.
-### Terminal ekranında çalışmak için "kitap_stok.py" dosyasıyla çalışmaya devam edebilirsiniz.
+#### Python ile yazdığımız bu programı artık terminal ekranında işlem yapmadan Windows ve Mac işletim sistemlerinde çalıştırabileceğiniz bir arayüz geliştiriyorum.
+#### Arayüzü başlatmak için IDE'nizde "gui.py" dosyasından çalıştırısanız program yeni bir pencerede açılacaktır.
+#### Terminal ekranında çalışmak için "kitap_stok.py" dosyasıyla çalışmaya devam edebilirsiniz.
 
  #### 1- pip install PyQt5
  #### 2- pip install pyinstaller
