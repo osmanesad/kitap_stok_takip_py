@@ -33,4 +33,20 @@
  ##### [kitap_adi, kitap_yazar, kitap_barkod, kitap_stok, kayit_tarihi] şeklinde.
  #### 6- Tarih-saat sütunu şimdilik boş kalmalı. Veritabanıyla uyum sorunu için güncelleme yapılacak.
  #### 7- Excel dosyasının adı mevcut veritabanı excel dosyasıyla aynı olmasın. Her seferinde farklı isimle kayıt alın.
+
+ # --> Yeni Güncelleme
+ 
+## Uygulamaya arayüz kazandırmak için kurulması gereken paketler. (07.08.2024)
+
+ #### Exdel veritabanına veri aktarmak için öncelikle bazı kurulumları yenilememiz gerecek.
+ #### 1- pip install PyQt5
+ #### 2- pip install pyinstaller
+ #### 3- pyinstaller --onefile --windowed gui.py
+ #### 4- Python versiyonunuzun güncel olduğundan emin olun.
+ #### 5- Kullandığınız IDE'nin güncel olduğundan ve kurulu paketlerinizin güncel olduğundan emin olun.
+
+
+
+
+ 
  
