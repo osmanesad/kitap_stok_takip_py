@@ -170,21 +170,16 @@ def secili_veriyi_sil(barkod):
     conn.commit()
     conn.close()
 
-def kitap_duzenle(barkod):
+def kitap_duzenle(barkod, yeni_ad, yeni_yazar, yeni_stok):
     conn = sqlite3.connect('kitaplar.db')
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM kitaplar WHERE kitap_barkod = ?", (barkod,))
     kitap = cursor.fetchone()
-    
+
     if kitap:
-        print(f"Mevcut Bilgiler: Kitap Adı: {kitap[1]}, Yazar: {kitap[2]}, Stok: {kitap[4]}, Eklenme Tarihi: {kitap[5]}, Son Güncelleme Tarihi: {kitap[6] if kitap[6] else 'Yeni güncelleme yok.'}")
-        
-        yeni_ad = input("Yeni Kitap Adı: ") or kitap[1]
-        yeni_yazar = input("Yeni Yazar : ") or kitap[2]
-        yeni_stok = input("Yeni Stok Adedi : ") or kitap[4]
+        print(f"Mevcut Bilgiler: Kitap Adı: {kitap[1]}, Yazar: {kitap[2]}, Stok: {kitap[4]}")
+
         guncelleme_tarihi = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        
-        
         
         try:
             cursor.execute("UPDATE kitaplar SET kitap_adi = ?, kitap_yazar = ?, kitap_stok = ?, guncelleme_tarihi = ? WHERE kitap_barkod = ?",
@@ -196,7 +191,7 @@ def kitap_duzenle(barkod):
             print(f"Güncelleme sırasında bir hata oluştu: {e}")
     else:
         print("Bu barkoda sahip kitap bulunamadı.")
-    
+
     conn.close()
 
     

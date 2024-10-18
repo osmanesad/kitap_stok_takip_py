@@ -1,10 +1,12 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QPushButton, QTableWidget, QTableWidgetItem, QLineEdit, QLabel, QHBoxLayout, QMessageBox, QInputDialog, QFileDialog
-from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import Qt
-
-# Mevcut kitap_stok.py dosyanızı import edin
-import kitap_stok
+import sqlite3
+from PyQt5.QtWidgets import (
+    QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
+    QPushButton, QTableWidget, QTableWidgetItem, QLineEdit, QLabel, QMessageBox, QFileDialog, QInputDialog
+)
+import pandas as pd
+from datetime import datetime
+import kitap_stok  # Veritabanı işlevlerini içeren modül
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -24,6 +26,7 @@ class MainWindow(QMainWindow):
         self.yazar_input = QLineEdit()
         self.barkod_input = QLineEdit()
         self.stok_input = QLineEdit()
+
         add_layout.addWidget(QLabel("Kitap Adı:"))
         add_layout.addWidget(self.kitap_adi_input)
         add_layout.addWidget(QLabel("Yazar:"))
@@ -32,6 +35,7 @@ class MainWindow(QMainWindow):
         add_layout.addWidget(self.barkod_input)
         add_layout.addWidget(QLabel("Stok:"))
         add_layout.addWidget(self.stok_input)
+
         add_button = QPushButton("Kitap Ekle")
         add_button.clicked.connect(self.add_book)
         add_layout.addWidget(add_button)
@@ -52,6 +56,10 @@ class MainWindow(QMainWindow):
         search_button = QPushButton("Kitap Ara")
         search_button.clicked.connect(self.search_book)
         button_layout.addWidget(search_button)
+
+        edit_button = QPushButton("Seçili Kitabı Düzenle")  # Düzenleme butonu
+        edit_button.clicked.connect(self.edit_selected_book)
+        button_layout.addWidget(edit_button)
 
         delete_button = QPushButton("Seçili Kitabı Sil")
         delete_button.clicked.connect(self.delete_selected_book)
@@ -74,11 +82,16 @@ class MainWindow(QMainWindow):
         yazar = self.yazar_input.text()
         barkod = self.barkod_input.text()
         stok = self.stok_input.text()
-        
+
         if kitap_adi and yazar and barkod and stok:
-            kitap_stok.kitap_ekle(kitap_adi, yazar, barkod, int(stok))
-            self.list_books()
-            self.clear_inputs()
+            try:
+                stok = int(stok)
+                kitap_stok.kitap_ekle(kitap_adi, yazar, barkod, stok)
+                self.list_books()
+                self.clear_inputs()
+                QMessageBox.information(self, "Başarılı", "Kitap başarıyla eklendi.")
+            except ValueError:
+                QMessageBox.warning(self, "Uyarı", "Stok bilgisi bir sayı olmalıdır.")
         else:
             QMessageBox.warning(self, "Uyarı", "Lütfen tüm alanları doldurun.")
 
@@ -98,6 +111,30 @@ class MainWindow(QMainWindow):
             else:
                 QMessageBox.warning(self, "Uyarı", "Kitap bulunamadı.")
 
+    def edit_selected_book(self):
+        selected_items = self.table.selectedItems()
+        if selected_items:
+            row = selected_items[0].row()
+            barkod = self.table.item(row, 3).text()
+
+            # Mevcut bilgileri al
+            current_book = kitap_stok.kitap_ara(barkod, return_data=True)
+            if current_book:
+                new_adi, ok1 = QInputDialog.getText(self, "Kitap Adını Düzenle", "Yeni Kitap Adı:", text=current_book[1])
+                new_yazar, ok2 = QInputDialog.getText(self, "Yazarı Düzenle", "Yeni Yazar:", text=current_book[2])
+                new_stok, ok3 = QInputDialog.getInt(self, "Stok Düzenle", "Yeni Stok:", value=current_book[4])
+
+                if ok1 and ok2 and ok3:
+                    kitap_stok.kitap_duzenle(barkod, new_adi, new_yazar, new_stok)  # Güncellenmiş parametreler eklendi
+                    self.list_books()
+                    QMessageBox.information(self, "Başarılı", "Kitap bilgileri güncellendi.")
+                else:
+                    QMessageBox.warning(self, "Uyarı", "Lütfen tüm bilgileri doldurun.")
+            else:
+                QMessageBox.warning(self, "Uyarı", "Bu barkoda sahip kitap bulunamadı.")
+        else:
+            QMessageBox.warning(self, "Uyarı", "Lütfen düzenlemek için bir kitap seçin.")
+
     def delete_selected_book(self):
         selected_items = self.table.selectedItems()
         if selected_items:
@@ -111,14 +148,17 @@ class MainWindow(QMainWindow):
             QMessageBox.warning(self, "Uyarı", "Lütfen silinecek bir kitap seçin.")
 
     def export_to_excel(self):
-        kitap_stok.verileri_excele_aktar()
-        QMessageBox.information(self, "Bilgi", "Veriler başarıyla Excel'e aktarıldı.")
+        file_name, _ = QFileDialog.getSaveFileName(self, "Excel Dosyası Kaydet", "", "Excel Files (*.xlsx *.xls)")
+        if file_name:
+            kitap_stok.verileri_excele_aktar(file_name)
+            QMessageBox.information(self, "Başarılı", "Veriler başarıyla Excel'e aktarıldı.")
 
     def import_from_excel(self):
         file_name, _ = QFileDialog.getOpenFileName(self, "Excel Dosyası Seç", "", "Excel Files (*.xlsx *.xls)")
         if file_name:
             kitap_stok.excel_to_database(file_name)
             self.list_books()
+            QMessageBox.information(self, "Başarılı", "Veriler başarıyla içe aktarıldı.")
 
     def clear_inputs(self):
         self.kitap_adi_input.clear()
