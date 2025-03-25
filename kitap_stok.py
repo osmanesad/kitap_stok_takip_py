@@ -173,7 +173,7 @@ def secili_veriyi_sil(barkod):
 def kitap_duzenle(barkod, yeni_ad, yeni_yazar, yeni_stok):
     conn = sqlite3.connect('kitaplar.db')
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM kitaplar WHERE kitap_barkod = ?", (barkod,))
+    cursor.execute("SELECT * FROM kitaplar WHERE kitap_barkod = ?", (barkod))
     kitap = cursor.fetchone()
 
     if kitap:
@@ -233,8 +233,11 @@ def ana_menu():
             barkod = input("Silinecek kitabın barkodunu girin: ")
             secili_veriyi_sil(barkod)
         elif secim == '6':
-            barkod = input("Düzenlenecek kitabın barkodunu girin: ")
-            kitap_duzenle(barkod)
+            barkod = input("Düzenlenecek kitabın barkodunu girin: "),
+            yeni_ad = input("Yeni Adı: "),
+            yeni_yazar = input("Yeni Yazar: "), 
+            yeni_stok = input("Yeni Stok:")
+            kitap_duzenle(barkod, yeni_ad, yeni_yazar, yeni_stok)
         elif secim == '7':
             verileri_excele_aktar()
         elif secim == '8':
