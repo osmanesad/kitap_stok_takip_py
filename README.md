@@ -47,6 +47,7 @@
  #### 3- pyinstaller --onefile --windowed gui.py
  #### 4- Python versiyonunuzun güncel olduğundan emin olun.
  #### 5- Kullandığınız IDE'nin güncel olduğundan ve kurulu paketlerinizin güncel olduğundan emin olun.
+ #### 6- Verileri Excel dosyasına aktarmak için kurduğumuz eklenti. Kurulum için "pip install pandas openpyxl"
 
 
 
