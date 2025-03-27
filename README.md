@@ -36,26 +36,26 @@ Sanal Ortam Oluşturma (Opsiyonel):
 
 2. **Projeye özel bir sanal ortam oluşturmak için:**
 
-```bash
+
 python -m venv venv
 Linux/Mac:
 
-```bash
+
 source venv/bin/activate
 Windows:
 
-```bash
+
 venv\Scripts\activate
 
 3. **Gerekli Paketleri Yükleyin:**
 
 Eğer proje kök dizininde requirements.txt dosyası varsa:
 
-`pip install -r requirements.txt
+pip install -r requirements.txt
 
 Aksi halde, aşağıdaki komutlarla bağımlılıkları yükleyin:
 
-`pip install PyQt5 pandas openpyxl
+pip install PyQt5 pandas openpyxl
 
 4. **Kullanım**
 
@@ -63,7 +63,7 @@ Grafiksel Arayüz (GUI)
 
 Grafiksel kullanıcı arayüzü ile çalıştırmak için:
 
-`python gui.py
+python gui.py
 
 Uygulama açıldığında, kitap ekleme için gerekli alanlar (Kitap Adı, Yazar, Barkod, Stok) ve ilgili butonlar yer alır.
 
@@ -75,7 +75,7 @@ Tüm işlemler, PyQt5 tabanlı modern ve kullanıcı dostu bir arayüz üzerinde
 
 Alternatif olarak, konsol tabanlı menü üzerinden işlem yapmak için:
 
-`python kitap_stok.py
+python kitap_stok.py
 
 Komut satırı arayüzünde menü seçenekleri ile kitap ekleme, listeleme, arama, güncelleme, silme, Excel'e aktarma ve içe aktarma işlemleri yapılabilir.
 
