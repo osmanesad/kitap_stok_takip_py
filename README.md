@@ -36,18 +36,20 @@ Sanal Ortam Oluşturma (Opsiyonel):
 
 2. **Projeye özel bir sanal ortam oluşturmak için:**
 
-`python -m venv venv
+```bash
+python -m venv venv
 Linux/Mac:
 
-
-`source venv/bin/activate
+```bash
+source venv/bin/activate
 Windows:
 
+```bash
+venv\Scripts\activate
 
-`venv\Scripts\activate
-Gerekli Paketleri Yükleyin:
+3. **Gerekli Paketleri Yükleyin:**
 
-3. **Eğer proje kök dizininde requirements.txt dosyası varsa:**
+Eğer proje kök dizininde requirements.txt dosyası varsa:
 
 `pip install -r requirements.txt
 
