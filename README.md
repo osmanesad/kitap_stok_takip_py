@@ -1,56 +1,104 @@
-# kitap_stok_takip_py
- Paython ile kitap stok takibi yapabileceğmiz basit bir veritabanı yapıyoruz.
+# Kitap Stok Takip Sistemi
 
- ### Çalışan İşlemler
- 
- #### 1- Kitap Ekle
- #### 2- Kitaplari Listele
- #### 3- Kitap Ara(Barkoda göre)
- #### 4- Tüm verileri sil(Bir hata alınca böyle bir şey ekleme gereği duydum.)
- #### 5- Seçili veriyi sil (barkod'a göre)
+Kitap Stok Takip Sistemi, Python kullanılarak geliştirilmiş, kitapların veritabanı üzerinden takip edilebildiği, ekleme, listeleme, arama, güncelleme ve silme işlemlerinin gerçekleştirilebildiği bir uygulamadır. Uygulama ayrıca Excel dosyalarıyla veri içe ve dışa aktarımını destekler.
 
- ### Eklemeyi Planladıklarım:
+## Özellikler
 
- #### 1- Yazar Adi
- ###### Güncellemeyle Eklendi (03.07.24)
- #### 2- Veri Güncelle
- ###### Üzerinde çalışılıyor
- ###### Şuan için kullanılabilir, tarih bilgisi üzerinde düşünülüyor.(05.07.24)
- #### 3- Excel'e aktar
- ###### Şuan için bu seçnek çalışıyor. Test aşamasında. (06.07.2024)
- #### 4- Excel'e aktarılmış bir veriyi ya da Excel tablosunu veritabanına aktarma.
- ###### Bu işlem sayesinde büyük verileri yani tabloları kolay bir şekilde vt'ye aktarılabilir. (Planlanan. Aktif değil.)
- ###### Yukarıdaki fikri uygulamaya koyduk. Şuan için test aşamasında ama çalışıyor. Yapılması gerekenleri aşağıda belirtiyorum. (26.07.2024) <-- Güncelleme Yapıldı -->
+- **Kitap Ekleme:** Kitap adı, yazar, barkod ve stok bilgilerini girerek yeni kayıt ekleme.
+- **Kitap Listeleme:** Veritabanındaki kitapların liste halinde görüntülenmesi.
+- **Kitap Arama:** Belirli bir barkod girilerek kitap arama.
+- **Kitap Güncelleme:** Seçili kitabın bilgilerini güncelleme.
+- **Kitap Silme:** Seçili kitabı veya tüm kayıtları silme.
+- **Excel Entegrasyonu:** Excel dosyalarından veri içe aktarımı ve veritabanındaki verilerin Excel'e aktarılması.
+- **Grafiksel Kullanıcı Arayüzü:** PyQt5 kullanılarak modern ve kullanıcı dostu bir arayüz sağlanmıştır.
+- **Komut Satırı Arayüzü:** `kitap_stok.py` modülü üzerinden konsol tabanlı menü ile de işlem yapma imkanı.
 
- ## Excel dosyasından veritabanına veri eklemek için yapılması gerekenler.
+## Gereksinimler
 
- #### Exdel veritabanına veri aktarmak için öncelikle bazı kurulumları yenilememiz gerecek.
- #### 1- pip install openpyxl [Bu eklentiyi kuruyoruz, mevcutsa güncelliyoruz.]
- #### 2- pip install pandas [Bu eklentiyi kuruyoruz, mevcutsa güncelliyoruz.]
- #### 3- Excel dosyamızının uzantısı .xlsx olacak.
- #### 4- Excel dosyamızın konumu python dosyalarımızın içinde yani ana klasörümüzde yer alacak.
- #### 5- Excel dosyamızdaki sütun başlıklarımız veritabanı başlıklarıyla aynı olmalı.
- ##### [kitap_adi, kitap_yazar, kitap_barkod, kitap_stok, kayit_tarihi] şeklinde.
- #### 6- Tarih-saat sütunu şimdilik boş kalmalı. Veritabanıyla uyum sorunu için güncelleme yapılacak.
- #### 7- Excel dosyasının adı mevcut veritabanı excel dosyasıyla aynı olmasın. Her seferinde farklı isimle kayıt alın.
+- **Python 3.x** (Önerilen: Python 3.7+)
+- **PyQt5:** Grafiksel arayüz oluşturmak için  
+  `pip install PyQt5`
+- **pandas:** Excel işlemleri ve veri manipülasyonu için  
+  `pip install pandas`
+- **openpyxl:** Excel dosyalarıyla çalışmak için  
+  `pip install openpyxl`
+- **SQLite:** Python’un standart kütüphanesi içinde bulunan `sqlite3` modülü kullanılır
 
- # --> Yeni Güncelleme
- 
-## Uygulamaya arayüz kazandırmak için kurulması gereken paketler. (07.08.2024)
+## Kurulum Adımları
 
-#### Python ile yazdığımız bu programı artık terminal ekranında işlem yapmadan Windows ve Mac işletim sistemlerinde çalıştırabileceğiniz bir arayüz geliştiriyorum.
-#### Arayüzü başlatmak için IDE'nizde "gui.py" dosyasından çalıştırısanız program yeni bir pencerede açılacaktır.
-#### Terminal ekranında çalışmak için "kitap_stok.py" dosyasıyla çalışmaya devam edebilirsiniz.
+1. **Projeyi İndirin:**
 
- #### 1- pip install PyQt5
- #### 2- pip install pyinstaller
- #### 3- pyinstaller --onefile --windowed gui.py
- #### 4- Python versiyonunuzun güncel olduğundan emin olun.
- #### 5- Kullandığınız IDE'nin güncel olduğundan ve kurulu paketlerinizin güncel olduğundan emin olun.
- #### 6- Verileri Excel dosyasına aktarmak için kurduğumuz eklenti. Kurulum için "pip install pandas openpyxl"
+   GitHub deposunu klonlayarak proje dizinine geçin:
+   ```bash
+   git clone https://github.com/osmanesad/kitap_stok_takip_py.git
+   cd kitap_stok_takip_py
+Sanal Ortam Oluşturma (Opsiyonel):
+
+Projeye özel bir sanal ortam oluşturmak için:
+
+python -m venv venv
+Linux/Mac:
 
 
+source venv/bin/activate
+Windows:
 
 
- 
- 
+venv\Scripts\activate
+Gerekli Paketleri Yükleyin:
+
+Eğer proje kök dizininde requirements.txt dosyası varsa:
+
+pip install -r requirements.txt
+Aksi halde, aşağıdaki komutlarla bağımlılıkları yükleyin:
+
+
+pip install PyQt5 pandas openpyxl
+
+Kullanım
+
+Grafiksel Arayüz (GUI)
+
+Grafiksel kullanıcı arayüzü ile çalıştırmak için:
+
+
+python gui.py
+
+Uygulama açıldığında, kitap ekleme için gerekli alanlar (Kitap Adı, Yazar, Barkod, Stok) ve ilgili butonlar yer alır.
+
+Liste, arama, düzenleme, silme ve Excel işlemleri için ayrı butonlar mevcuttur.
+
+Tüm işlemler, PyQt5 tabanlı modern ve kullanıcı dostu bir arayüz üzerinden gerçekleştirilir.
+
+Komut Satırı Arayüzü
+Alternatif olarak, konsol tabanlı menü üzerinden işlem yapmak için:
+
+python kitap_stok.py
+Komut satırı arayüzünde menü seçenekleri ile kitap ekleme, listeleme, arama, güncelleme, silme, Excel'e aktarma ve içe aktarma işlemleri yapılabilir.
+
+Menüde listelenen numaralı seçeneklerden istediklerinizi seçerek işlemlerinizi gerçekleştirebilirsiniz.
+
+Veritabanı
+Uygulama, proje dizininde kitaplar.db adında bir SQLite veritabanı dosyası oluşturur.
+
+Veritabanı ilk çalıştırmada kitaplar adında bir tablo oluşturur. Bu tablo; kitap adı, yazar, barkod, stok, kayıt tarihi ve (opsiyonel) güncelleme tarihi sütunlarını içerir.
+
+Excel Entegrasyonu
+Verileri İçe Aktarma: Belirtilen Excel dosyasındaki verileri veritabanına aktarır.
+
+Verileri Excel'e Aktarma: Veritabanındaki tüm kayıtları belirtilen Excel dosyasına yazar.
+
+Excel işlemleri için pandas ve openpyxl kütüphaneleri kullanılır.
+
+Sorun Giderme
+Bağımlılık Hataları:
+Gerekli paketlerin yüklendiğinden emin olun (pip install PyQt5 pandas openpyxl).
+
+Veritabanı Hataları:
+Eğer veritabanı dosyasında sorun yaşıyorsanız, dosyayı silip uygulamayı yeniden çalıştırmayı deneyin.
+
+Excel İşlemleri:
+Excel içe/dışa aktarma işlemleri sırasında hata alırsanız, dosya adının ve formatının doğru olduğundan emin olun.
+
+Katkıda Bulunma
+Herhangi bir hata bildirimi, geliştirme önerisi veya katkıda bulunmak için lütfen GitHub üzerinden issue açın veya pull request gönderin.
