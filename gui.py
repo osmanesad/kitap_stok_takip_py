@@ -41,8 +41,8 @@ class MainWindow(QMainWindow):
 
         # Kitap Listesi Tablosu
         self.table = QTableWidget()
-        self.table.setColumnCount(6)
-        self.table.setHorizontalHeaderLabels(["ID", "Kitap Adı", "Yazar", "Barkod", "Stok", "Kayıt Tarihi"])
+        self.table.setColumnCount(7)
+        self.table.setHorizontalHeaderLabels(["ID", "Kitap Adı", "Yazar", "Barkod", "Stok", "Kayıt Tarihi", "Güncelleme Tarihi"])
         # Sütun genişlikleri ile görsel iyileştirme
         self.table.setColumnWidth(0, 50)    # ID
         self.table.setColumnWidth(1, 200)   # Kitap Adı
@@ -50,6 +50,7 @@ class MainWindow(QMainWindow):
         self.table.setColumnWidth(3, 100)   # Barkod
         self.table.setColumnWidth(4, 70)    # Stok
         self.table.setColumnWidth(5, 150)   # Kayıt Tarihi
+        self.table.setColumnWidth(6, 170)   # Güncelleme Tarihi
         layout.addWidget(self.table)
 
         # Diğer İşlem Butonları
@@ -91,10 +92,13 @@ class MainWindow(QMainWindow):
         if kitap_adi and yazar and barkod and stok:
             try:
                 stok = int(stok)
-                kitap_stok.kitap_ekle(kitap_adi, yazar, barkod, stok)
-                self.list_books()
-                self.clear_inputs()
-                QMessageBox.information(self, "Başarılı", "Kitap başarıyla eklendi.")
+                basarili, mesaj = kitap_stok.kitap_ekle(kitap_adi, yazar, barkod, stok)
+                if basarili:
+                    self.list_books()
+                    self.clear_inputs()
+                    QMessageBox.information(self, "Başarılı", mesaj)
+                else:
+                    QMessageBox.warning(self, "Uyarı", mesaj)
             except ValueError:
                 QMessageBox.warning(self, "Uyarı", "Stok bilgisi bir sayı olmalıdır.")
             except Exception as e:
@@ -108,7 +112,7 @@ class MainWindow(QMainWindow):
             self.table.setRowCount(len(books))
             for row, book in enumerate(books):
                 for col, item in enumerate(book):
-                    self.table.setItem(row, col, QTableWidgetItem(str(item)))
+                    self.table.setItem(row, col, QTableWidgetItem("" if item is None else str(item)))
         except Exception as e:
             QMessageBox.critical(self, "Hata", f"Kitaplar listelenirken hata oluştu: {e}")
 
@@ -120,7 +124,8 @@ class MainWindow(QMainWindow):
                 if book:
                     QMessageBox.information(
                         self, "Kitap Bulundu",
-                        f"ID: {book[0]}\nKitap Adı: {book[1]}\nYazar: {book[2]}\nBarkod: {book[3]}\nStok: {book[4]}\nKayıt Tarihi: {book[5]}"
+                        f"ID: {book[0]}\nKitap Adı: {book[1]}\nYazar: {book[2]}\nBarkod: {book[3]}"
+                        f"\nStok: {book[4]}\nKayıt Tarihi: {book[5]}\nGüncelleme Tarihi: {book[6] or 'Henüz güncellenmedi'}"
                     )
                 else:
                     QMessageBox.warning(self, "Uyarı", "Kitap bulunamadı.")
@@ -141,9 +146,12 @@ class MainWindow(QMainWindow):
                 if dialog.exec_() == QDialog.Accepted:
                     new_adi, new_yazar, new_stok = dialog.get_data()
                     try:
-                        kitap_stok.kitap_duzenle(barkod, new_adi, new_yazar, new_stok)
-                        self.list_books()
-                        QMessageBox.information(self, "Başarılı", "Kitap bilgileri güncellendi.")
+                        basarili, mesaj = kitap_stok.kitap_duzenle(barkod, new_adi, new_yazar, new_stok)
+                        if basarili:
+                            self.list_books()
+                            QMessageBox.information(self, "Başarılı", mesaj)
+                        else:
+                            QMessageBox.warning(self, "Uyarı", mesaj)
                     except Exception as e:
                         QMessageBox.critical(self, "Hata", f"Güncelleme sırasında hata oluştu: {e}")
             else:
@@ -163,8 +171,12 @@ class MainWindow(QMainWindow):
             )
             if reply == QMessageBox.Yes:
                 try:
-                    kitap_stok.secili_veriyi_sil(barkod)
-                    self.list_books()
+                    basarili, mesaj = kitap_stok.secili_veriyi_sil(barkod)
+                    if basarili:
+                        self.list_books()
+                        QMessageBox.information(self, "Başarılı", mesaj)
+                    else:
+                        QMessageBox.warning(self, "Uyarı", mesaj)
                 except Exception as e:
                     QMessageBox.critical(self, "Hata", f"Silme sırasında hata oluştu: {e}")
         else:
@@ -252,6 +264,8 @@ class EditBookDialog(QDialog):
         )
 
 if __name__ == "__main__":
+    kitap_stok.veritabani_olustur()
+    kitap_stok.guncelle_veritabani_semasi()
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()
